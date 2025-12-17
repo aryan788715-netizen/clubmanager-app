@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClubManager - Professional Club Management System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #ec4899;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* Login Page */
+        .login-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-page::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            top: -300px;
+            right: -200px;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-30px); }
+        }
+
+        .login-card {
+            background: white;
+            padding: 50px;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 450px;
+            position: relative;
+            z-index: 10;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin: 0 auto 25px;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+        }
+
+        .login-title {
+            font-size: 32px;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .login-subtitle {
+            text-align: center;
+            color: var(--gray);
+            margin-bottom: 35px;
+            font-size: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--dark);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 15px;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary { background: var(--gray); color: white; }
+        .btn-success { background: var(--success); color: white; }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-warning { background: var(--warning); color: white; }
+
+        .alert {
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .alert-success { background: rgba(16, 185, 129, 0.1); color: var(--success); border-left: 4px solid var(--success); }
+        .alert-error { background: rgba(239, 68, 68, 0.1); color: var(--danger); border-left: 4px solid var(--danger); }
+        .alert-info { background: rgba(59, 130, 246, 0.1); color: var(--info); border-left: 4px solid var(--info); }
+        .alert-warning { background: rgba(245, 158, 11, 0.1); color: var(--warning); border-left: 4px solid var(--warning); }
+
+        .demo-accounts {
+            margin-top: 25px;
+            padding: 20px;
+            background: var(--light);
+            border-radius: 14px;
+            font-size: 13px;
+            line-height: 2;
+        }
+
+        .demo-accounts strong {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--dark);
+            font-size: 14px;
+        }
+
+        /* Dashboard Layout */
+        .dashboard {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .dashboard.active {
+            display: flex;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-right: 1px solid var(--border);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 25px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar-logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+
+        .sidebar-logo-text h2 {
+            font-size: 20px;
+            font-weight: 900;
+            color: var(--dark);
+        }
+
+        .sidebar-logo-text p {
+            font-size: 12px;
+            color: var(--gray);
+            font-weight: 600;
+        }
+
+        .nav-section {
+            padding: 20px 0;
+        }
+
+        .nav-section-title {
+            padding: 0 25px;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--gray);
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-item {
+            padding: 12px 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--gray);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: rgba(99, 102, 241, 0.08);
+            color: var(--primary);
+            border-left: 3px solid var(--primary);
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 30px;
+            width: calc(100% - 280px);
+            min-height: 100vh;
+            background: var(--light);
+        }
+
+        .topbar {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .topbar h1 {
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--dark);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 16px 8px 8px;
+            background: var(--light);
+            border-radius: 12px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 16px;
+        }
+
+        .user-info h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .user-info p {
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 28px;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--gray);
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--dark);
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .card-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--dark);
+        }
+
+        .btn-sm {
+            padding: 10px 20px;
+            font-size: 14px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .btn-icon {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 16px;
+            font-weight: 800;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: var(--gray);
+            background: var(--light);
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 18px 16px;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+        }
+
+        tr:hover {
+            background: var(--light);
+        }
+
+        .badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-success { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+        .badge-danger { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+        .badge-warning { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
+        .badge-info { background: rgba(59, 130, 246, 0.1); color: var(--info); }
+        .badge-primary { background: rgba(99, 102, 241, 0.1); color: var(--primary); }
+
+        .page-content {
+            display: none;
+        }
+
+        .page-content.active {
+            display: block;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 52px;
+            height: 28px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #cbd5e1;
+            transition: 0.4s;
+            border-radius: 28px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--gray);
+        }
+
+        .empty-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-title {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(6px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 900;
+            margin-bottom: 25px;
+            color: var(--dark);
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .modal-footer .btn {
+            flex: 1;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 15px;
+            transition: all 0.3s;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        /* Maintenance Screen */
+        .maintenance-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: white;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .maintenance-screen.active {
+            display: flex;
+        }
+
+        .maintenance-icon {
+            font-size: 100px;
+            margin-bottom: 25px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .maintenance-title {
+            font-size: 42px;
+            font-weight: 900;
+            margin-bottom: 15px;
+        }
+
+        .maintenance-message {
+            font-size: 18px;
+            max-width: 600px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+            }
+
+            .sidebar.mobile-open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Maintenance Screen -->
+    <div id="maintenanceScreen" class="maintenance-screen">
+        <div class="maintenance-icon">🔧</div>
+        <h1 class="maintenance-title">Under Maintenance</h1>
+        <p class="maintenance-message" id="maintenanceMessage">We're currently performing scheduled maintenance. We'll be back soon!</p>
+    </div>
+
+    <!-- Login Page -->
+    <div id="loginPage" class="login-page">
+        <div class="login-card">
+            <div class="logo">🎭</div>
+            <h1 class="login-title">ClubManager</h1>
+            <p class="login-subtitle">Professional Club Management System</p>
+            
+            <div id="loginAlert"></div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" id="loginPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Sign In</button>
+            </form>
+
+            <div class="demo-accounts">
+                <strong>🔑 Demo Accounts:</strong>
+                <div><strong>Owner:</strong> owner@club.com / owner123</div>
+                <div><strong>Admin:</strong> admin@club.com / admin123</div>
+                <div><strong>User:</strong> user@club.com / user123</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Owner Dashboard -->
+    <div id="ownerDashboard" class="dashboard">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <div class="sidebar-logo-icon">🎭</div>
+                    <div class="sidebar-logo-text">
+                        <h2>ClubManager</h2>
+                        <p>Owner Panel</p>
+                    </div>
+                </div>
+            </div>
+            <nav class="nav-section">
+                <div class="nav-section-title">Main</div>
+                <div class="nav-item active" onclick="showOwnerPage('dashboard')">
+                    <span class="nav-icon">📊</span>
+                    <span>Dashboard</span>
+                </div>
+                <div class="nav-item" onclick="showOwnerPage('events')">
+                    <span class="nav-icon">🎉</span>
+                    <span>Events</span>
+                </div>
+                <div class="nav-item" onclick="showOwnerPage('bookings')">
+                    <span class="nav-icon">📅</span>
+                    <span>Bookings</span>
+                </div>
+                <div class="nav-item" onclick="showOwnerPage('users')">
+                    <span class="nav-icon">👥</span>
+                    <span>Users</span>
+                </div>
+            </nav>
+            <nav class="nav-section">
+                <div class="nav-section-title">Owner Controls</div>
+                <div class="nav-item" onclick="showOwnerPage('admins')">
+                    <span class="nav-icon">👨‍💼</span>
+                    <span>Manage Admins</span>
+                </div>
+                <div class="nav-item" onclick="showOwnerPage('customize')">
+                    <span class="nav-icon">🎨</span>
+                    <span>Customize</span>
+                </div>
+                <div class="nav-item" onclick="showOwnerPage('maintenance')">
+                    <span class="nav-icon">🔧</span>
+                    <span>Maintenance</span>
+                </div>
+            </nav>
+            <nav class="nav-section">
+                <div class="nav-section-title">Account</div>
+                <div class="nav-item" onclick="logout()">
+                    <span class="nav-icon">🚪</span>
+                    <span>Logout</span>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="topbar">
+                <h1 id="ownerPageTitle">Dashboard</h1>
+                <div class="user-profile">
+                    <div class="user-avatar">O</div>
+                    <div class="user-info">
+                        <h4>Club Owner</h4>
+                        <p>Super Admin</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Page -->
+            <div id="ownerDashboardPage" class="page-content active">
+                <div class="stats-grid" id="ownerStats"></div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">System Overview</h2>
+                    </div>
+                    <div id="ownerOverview"></div>
+                </div>
+            </div>
+
+            <!-- Events Page -->
+            <div id="ownerEventsPage" class="page-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Manage Events</h2>
+                        <button class="btn-sm btn-primary btn-icon" onclick="openEventModal()">
+                            <span>➕</span>
+                            <span>Add Event</span>
+                        </button>
+                    </div>
+                    <div id="ownerEventsList"></div>
+                </div>
+            </div>
+
+            <!-- Bookings Page -->
+            <div id="ownerBookingsPage" class="page-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">All Bookings</h2>
+                    </div>
+                    <div id="ownerBookingsList"></div>
+                </div>
+            </div>
+
+            <!-- Users Page -->
+            <div id="ownerUsersPage" class="page-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Registered Users</h2>
+                    </div>
+                    <div id="ownerUsersList"></div>
+                </div>
+            </div>
+
+            <!-- Admins Page -->
+            <div id="ownerAdminsPage" class="page-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Manage Admins</h2>
+                        <button class="btn-sm btn-primary btn-icon" onclick="openAdminModal()">
+                            <span>➕</span>
+                            <span>Add Admin</span>
+                        </button>
+                    </div>
+                    <div id="ownerAdminsList"></div>
+                </div>
+            </div>
+
+            <!-- Customize Page -->
+            <div id="ownerCustomizePage" class="page-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Customize Club</h2>
+                    </div>
+                    <form id="customizeForm">
+                        <div class="form-group">
+                            <label class="form-label">Club Name</label>
+                            <input type="text" class="form-input" id="clubName" placeholder="ClubManager">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Club Description</label>
+                            <input type="text" class="form-input" id="clubDesc" placeholder="Professional Club Management">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Maintenance Page -->
+            <div id="ownerMaintenancePage" class="page-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Maintenance Mode</h2>
+                    </div>
+                    <div class="alert alert-warning">
+                        <span>⚠️</span>
+                        <div><strong>Warning:</strong> Enabling maintenance mode will block all users and admins from accessing the system.</div>
+                    </div>
+                    <form id="maintenanceForm">
+                        <div class="form-group">
+                            <label class="form-label">Enable Maintenance Mode</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="maintenanceToggle">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Maintenance Message</label>
+                            <textarea class="form-textarea" id="maintenanceMsg">We're currently performing scheduled maintenance. We'll be back soon!</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Settings</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="adminDashboard" class="dashboard">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <div class="sidebar-logo-icon">🎭</div>
+                    <div class="sidebar-logo-text">
+                        <h2>ClubManager</h2>
+                        <p>Admin Panel</p>
+                    </div>
+                </div>
+            </div>
+            <nav class="nav-section">
+                <div class="nav-section-title">Main</div>
+                <div class="nav-item active" onclick="showAdminPage('dashboard')">
+                    <span class="nav-icon">📊</span>
+                    <span>Dashboard</span>
+                </div>
+                <div class="nav-item" onclick="showAdminPage('events')">
+                    <span class="nav-icon">🎉</span>
+                    <span>Events</span>
+                </div>
+                <div class="nav-item" onclick="showAdminPage('bookings')">
+                    <span class="nav-icon">📅</span>
+                    <span>Bookings</span>
+                </div>
+                <div class="nav-item" onclick="showAdminPage('notifications')">
+                    <span class="nav-icon">📢</span>
+                    <span>Notifications</span>
+                </div>
+            </nav>
+            <nav class="nav-section">
+                <div class="nav-section-title">Account</div>
+                <div class="nav-item" onclick="logout()">
+                    <span class="nav-icon">🚪</span>
+                    <span>Logout</span>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="topbar">
+                <h1 id="adminPageTitle">Dashboard</h1>
+                <div class="user-profile">
+                    <div class="user-avatar">A</div>
+                    <div class="user-info">
+                        <h4>Admin User</h4>
+                        <p>Administrator</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Page -->
+            <div id="adminDashboardPage" class="page-content active">
+                <div class="stats-grid" id="adminStats"></div>
+            </div>
+
+            <!-- Events Page -->
+            <div id="adminEventsPage" class="page-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Manage Events</h2>
+                        <button class="btn-sm btn-primary btn-icon" onclick="openEventModal()">
+                            <span>➕</span>
+                            <span>Add Event</span>
+                        </button>
+                    </div>
+                    <div id="adminEventsList"></div>
+                </div>
+            </div>
+
+            <!-- Bookings Page -->
+            <div id="adminBookingsPage" class="page-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">All Bookings</h2>
+                    </div>
+                    <div id="adminBookingsList"></div>
+                </div>
+            </div>
+
+            <!-- Notifications Page -->
+            <div id="adminNotificationsPage" class="page-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Send Notification</h2>
+                    </div>
+                    <form id="notificationForm">
+                        <div class="form-group">
+                            <label class="form-label">Title</label>
+                            <input type="text" class="form-input" id="notifTitle" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Message</label>
+                            <textarea class="form-textarea" id="notifMessage" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send to All Users</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- User Dashboard -->
+    <div id="userDashboard" class="dashboard">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <div class="sidebar-logo-icon">🎭</div>
+                    <div class="sidebar-logo-text">
+                        <h2>ClubManager</h2>
+                        <p>User Portal</p>
+                    </div>
+                </div>
+            </div>
+            <nav class="nav-section">
+                <div class="nav-section-title">Main</div>
+                <div class="nav-item active" onclick="showUserPage('events')">
+                    <span class="nav-icon">🎉</span>
+                    <span>Events</span>
+                </div>
+                <div class="nav-item" onclick="showUserPage('bookings')">
+                    <span class="nav-icon">📅</span>
+                    <span>My Bookings</span>
+                </div>
+                <div class="nav-item" onclick="showUserPage('notifications')">
+                    <span class="nav-icon">🔔</span>
+                    <span>Notifications</span>
+                </div>
+            </nav>
+            <nav class="nav-section">
+                <div class="nav-section-title">Account</div>
+                <div class="nav-item" onclick="logout()">
+                    <span class="nav-icon">🚪</span>
+                    <span>Logout</span>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="topbar">
+                <h1 id="userPageTitle">Events</h1>
+                <div class="user-profile">
+                    <div class="user-avatar">U</div>
+                    <div class="user-info">
+                        <h4 id="userName">User</h4>
+                        <p>Member</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Events Page -->
+            <div id="userEventsPage" class="page-content active">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Upcoming Events</h2>
+                    </div>
+                    <div id="userEventsList"></div>
+                </div>
+            </div>
+
+            <!-- Bookings Page -->
+            <div id="userBookingsPage" class="page-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">My Bookings</h2>
+                    </div>
+                    <div id="userBookingsList"></div>
+                </div>
+            </div>
+
+            <!-- Notifications Page -->
+            <div id="userNotificationsPage" class="page-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Notifications</h2>
+                    </div>
+                    <div id="userNotificationsList"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Event Modal -->
+    <div id="eventModal" class="modal">
+        <div class="modal-content">
+            <h3 class="modal-title" id="eventModalTitle">Add Event</h3>
+            <form id="eventForm">
+                <input type="hidden" id="eventId">
+                <div class="form-group">
+                    <label class="form-label">Event Title</label>
+                    <input type="text" class="form-input" id="eventTitle" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-textarea" id="eventDesc" required></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Date</label>
+                        <input type="date" class="form-input" id="eventDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Time</label>
+                        <input type="time" class="form-input" id="eventTime" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Price (₹)</label>
+                        <input type="number" class="form-input" id="eventPrice" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Capacity</label>
+                        <input type="number" class="form-input" id="eventCapacity" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Venue</label>
+                    <input type="text" class="form-input" id="eventVenue" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeEventModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Event</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Modal -->
+    <div id="adminModal" class="modal">
+        <div class="modal-content">
+            <h3 class="modal-title">Add Admin</h3>
+            <form id="adminForm">
+                <div class="form-group">
+                    <label class="form-label">Name</label>
+                    <input type="text" class="form-input" id="adminName" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" id="adminEmail" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" id="adminPassword" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeAdminModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Admin</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Booking Modal -->
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <h3 class="modal-title" id="bookingEventTitle">Book Event</h3>
+            <div id="bookingEventDetails"></div>
+            <form id="bookingForm">
+                <input type="hidden" id="bookingEventId">
+                <div class="form-group">
+                    <label class="form-label">Number of Guests</label>
+                    <input type="number" class="form-input" id="guestCount" min="1" value="1" required>
+                </div>
+                <div style="font-size: 24px; font-weight: 900; color: var(--primary); margin: 20px 0;">
+                    Total: <span id="totalAmount">₹0</span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeBookingModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Confirm Booking</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
